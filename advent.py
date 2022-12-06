@@ -59,7 +59,11 @@ def day2(lut_version: int):
     total_score: int = 0
     for match in matches:
         if match:
-            total_score += points_lut[lut_version].get(match)
+            total_score += (
+                points_lut[lut_version][match]
+                if points_lut[lut_version].get(match)
+                else 0
+            )
 
     print(total_score)
 
@@ -116,8 +120,8 @@ def day4():
 
 def day5(cratemover_9001: bool):
     """day5"""
-    crates_and_operations = get_input("input5.txt")
-    crates_raw = [
+    crates_and_operations: list = get_input("input5.txt")
+    crates_raw: list = [
         (
             crate_row.replace("    ", " [ ]")
             .replace("[", "")
@@ -137,7 +141,7 @@ def day5(cratemover_9001: bool):
         list(int(s) for s in operation.split() if s.isdigit())
         for operation in crates_and_operations[9:]
     ]
-    crate_capacity = 0
+    crate_capacity: int = 0
     for operation in operations:
         for i in range(operation[0]):
             if cratemover_9001:
@@ -152,7 +156,21 @@ def day5(cratemover_9001: bool):
             print(stack[0], end="")
         else:
             print(" ", end="")
-    print('')
+    print("")
+
+
+def day6(marker_size: int):
+    """day6"""
+    datastream: str = get_input("input6.txt")[0]
+    buf: str = ''
+    i: int = 0
+    for i, char in enumerate(datastream):
+        buf += char
+        if len(buf) == marker_size:
+            if len(set(buf)) == marker_size:
+                break
+            buf = buf[1:]
+    print(i+1)
 
 
 if __name__ == "__main__":
@@ -163,5 +181,7 @@ if __name__ == "__main__":
     # day3('item_priority_sum')
     # day3('badge_priority_sum')
     # day4()
-    day5(False)
-    day5(True)
+    # day5(False)
+    # day5(True)
+    day6(4)
+    day6(14)
